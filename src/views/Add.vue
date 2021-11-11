@@ -33,60 +33,69 @@
   
 </template>
 <script>
+import { ref, computed, withCtx } from "vue";
+import { onMounted } from "vue";
 export default {
   name: "Add",
   props:{data: Object},
-  data() {
-    return {
-      name: '',
-      email: '' ,
-      nameError: "",
-      id:''
-    };
-  },
-   mounted() {
-        let vm = this;      
-        vm.$nextTick(function () {      
-           console.log(vm.data);
-           this.name = vm.data.name;
-           this.email = vm.data.email;
-           this.id =  vm.data.id
-        }); 
-  },
- 
-  methods: {
-    handelSubmit() {
-      if (this.name.length < 5) {
-        this.nameError =
-          this.name.length > 5 ? "" : "Name must be at least 6 char";
+   emits: ['close:false'],
+  setup(props,{emit}) {
+    console.log(props.data,"!!!!!!!!!!!!!!!!!!!!!!!!")
+    const name = ref('');
+    const email = ref('');
+    const nameError = ref("");
+    const id = ref("");
+      
+    const handelSubmit =()=> {
+      if (name.value.length < 5) {
+        nameError.value =
+          name.value.length > 5 ? "" : "Name must be at least 6 char";
         return;
       } else {
          const data ={
-        name:this.name,
-        email:this.email,
-        id:this.id,
+        name:name.value,
+        email:email.value,
+        id:id.value,
         close:false
       }
-      this.$emit('closeDilog',data)
+      emit('closeDilog',data)
       }
-    },
-    close() {
-      const data ={
-        name:this.name,
-        email:this.email,
-        id:this.id,
-        close:false
-      }
-      this.$emit('closeDilog',data)
     }
 
-  },
-  events:{  
-    'event_name' : function(data){
-        this.$broadcast('event_name', data);
-        console.warn("#################",data)
-    },
+    const close =() =>{
+      const data ={
+        name:name.value,
+        email:email.value,
+        id:id.value,
+        close:false
+      }
+     emit('closeDilog',data)
     }
+
+    onMounted(() => {
+           name.value = props.data.name;
+           email.value = props.data.email;
+           id.value =  props.data.id
+    })
+    return {
+      name,
+      email,
+      nameError,
+      id,
+      handelSubmit,
+      close
+    };
+  },
+  //  mounted() {
+  //       let vm = this;      
+  //       vm.$nextTick(function () {      
+  //          console.log(vm.data);
+  //          this.name = vm.data.name;
+  //          this.email = vm.data.email;
+  //          this.id =  vm.data.id
+  //       }); 
+  // },
+ 
 };
 </script>
 <style>

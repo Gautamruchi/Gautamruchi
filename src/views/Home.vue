@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>My To-Do List</h1>
-    <button class="btn btn-blue" type="submit"  @click="addUser">
+    <button class="btn btn-blue" type="submit" @click="addUser">
       Add todo
     </button>
     <div class="card grid grid-cols-1 md:grid-cols-4" v-if="list">
@@ -32,17 +32,17 @@
               class="pointer"
               id="li-border"
               data-v-3ed2ff7e=""
-               @click="edit(item)"
+              @click="editList(item)"
             >
               Edit
             </li>
-            <li data-v-3ed2ff7e="" class="pointer"  @click="deletData(item)">
+            <li data-v-3ed2ff7e="" class="pointer" @click="deletData(item)">
               Delete
             </li>
           </ul>
         </div>
         <div v-if="isModalVisible">
-          <add :data="singleData" @closeDilog="closeModal($event)" />
+          <add :data="singleData" @closeDilog="closeModel($event)" />
         </div>
       </div>
     </div>
@@ -53,57 +53,66 @@ import Vue from "vue";
 import VueAxios from "vue-axios";
 import axios from "axios";
 import Add from "../views/Add.vue";
+import { ref, computed } from "vue";
 
 export default {
   name: "app",
   components: {
     Add,
   },
-  data() {
-    return {
-      list: undefined,
-      isModalVisible: false,
-      data: undefined,
-      singleData: undefined,
-    };
-  },
-  mounted() {
-    axios.get("https://jsonplaceholder.typicode.com/users").then((response) => {
-      this.list = response.data;
-    });
-    this.isModalVisible = false;
-  },
-  methods: {
-    addUser() {
-      this.singleData = "";
-       this.isModalVisible = true;
-    },
+  setup(ctx) {
+    const list = ref([]);
+    const isModalVisible = ref(false);
+    const singleData = ref("");
+    fetch("https://jsonplaceholder.typicode.com/users").then((res) =>
+      res.json().then((data) => (list.value = data))
+    );
 
-    closeModal(data) {
+    const closeModel = (data) => {
       console.log(data, "titletitle");
-      this.isModalVisible = data.close;
-      if(data.id){
-      this.list.forEach(element => {
-        if(element.id == data.id){
-          element.name = data.name;
-          element.email = data.email;
+      isModalVisible.value = data.close;
+      if (data.id) {
+        list.value.forEach((element) => {
+          if (element.id == data.id) {
+            element.name = data.name;
+            element.email = data.email;
           }
-      });
-      }else{
-        this.list.push(data)
+        });
+      } else {
+        list.value.push(data);
       }
-    },
-    edit(item) {
-      this.singleData = item;
-      console.log(this.singleData);
-      this.isModalVisible = true;
-    },
-    deletData(item) {
-      const newList = this.list.filter((e) => {
+    };
+
+    const editList = (item) => {
+      singleData.value = item;
+      isModalVisible.value = true;
+    };
+
+    const deletData = (item)=> {
+      const newList = list.value.filter((e) => {
         return e.name != item.name;
       });
-      this.list = newList;
-    },
+     list.value = newList;
+    }
+
+    const addUser =()=>{
+       singleData.value = '';
+      isModalVisible.value = true;
+    }
+    return {
+      list,
+      isModalVisible,
+      closeModel,
+      data: undefined,
+      singleData,
+      editList,
+      deletData,
+      addUser
+    };
+  },
+
+  methods: {
+    
   },
 };
 </script>
