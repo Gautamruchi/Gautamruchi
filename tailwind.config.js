@@ -1,24 +1,18 @@
-const plugin = require('tailwindcss/plugin')
-
+const defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
-    purge: { content: ['./public/**/*.html', './src/**/*.vue'] },
-    darkMode: false, // or 'media' or 'class'
+    future: {
+        // removeDeprecatedGapUtilities: true,
+        // purgeLayersByDefault: true,
+    },
+    purge: [
+        './public/**/*.html',
+        './src/**/*.vue',
+    ],
     theme: {
-        extend: {
-            gridTemplateColumns: {
-                // Simple 16 column grid
-                '16': 'repeat(16, minmax(0, 1fr))',
-
-                // Complex site-specific column configuration
-                'footer': '200px minmax(900px, 1fr) 100px',
-            }
-        }
+        fontFamily: {
+            sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        },
     },
-    variants: {
-        extend: {},
-    },
-    plugins: [
-        require('@tailwindcss/forms'),
-
-    ]
-}
+    variants: {},
+    plugins: [],
+};

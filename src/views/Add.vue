@@ -1,26 +1,27 @@
 <template>
-  <div class="about modal-backdrop">
-    <div class="modal">
-   <header class="modal-header">
+  <div class=" fixed inset-0 bg-black flex justify-center items-center">
+    <div class="modal bg-gray-50 overflow-auto flex-col shadow-md">
+   <header class="flex relative bg-blue-500 p-3 justify-between">
         <slot name="header">
         Add 
         </slot>
         <button
           type="button"
-          class="btn-close"
           @click="close"
         >
           x
         </button>
       </header>
     <div>
-       <section class="modal-body">
+                <!-- class="absolute inset-0 text-sm p-4 bg-opacity-5 bg-purple-600 border-none cursor-pointer" -->
+
+       <section class="relative p-5">
     <form @submit.prevent="handelSubmit">
-      <label>Name</label>
-      <input type="text" class="rounded text-pink-500"  required v-model="name" />
+      <label class="p-1">Name</label>
+      <input type="text" class="rounded text-pink-500 p-1"  required v-model="name" />
       <div v-if="name">{{ nameError }}</div>
-      <label>Email</label>
-      <input type="email" class="rounded text-pink-500"  required v-model="email" />
+      <label class=" p-1">Email</label>
+      <input type="email" class="rounded text-pink-500 p-1"  required v-model="email" />
 
       <div class="submit">
         <button class="btn btn-blue" type="submit">Add todo</button>
@@ -103,73 +104,11 @@ export default {
     @apply font-bold py-2 px-4 m-2.5 rounded;
   }
   .btn-blue {
-    @apply bg-blue-500 text-white;
+    @apply bg-blue-500 text-gray-50;
   }
   .btn-blue:hover {
     @apply bg-blue-700;
   }
 
-   .modal-backdrop {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 
-  .modal {
-    background: #FFFFFF;
-    box-shadow: 2px 2px 20px 1px;
-    overflow-x: auto;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .modal-header,
-  .modal-footer {
-    padding: 15px;
-    display: flex;
-  }
-
-  .modal-header {
-    position: relative;
-    border-bottom: 1px solid #eeeeee;
-    color: #4AAE9B;
-    justify-content: space-between;
-  }
-
-  .modal-footer {
-    border-top: 1px solid #eeeeee;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-
-  .modal-body {
-    position: relative;
-    padding: 20px 10px;
-  }
-
-  .btn-close {
-    position: absolute;
-    top: 0;
-    right: 0;
-    border: none;
-    font-size: 20px;
-    padding: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #4AAE9B;
-    background: transparent;
-  }
-
-  .btn-green {
-    color: white;
-    background: #4AAE9B;
-    border: 1px solid #4AAE9B;
-    border-radius: 2px;
-  }
 </style>
